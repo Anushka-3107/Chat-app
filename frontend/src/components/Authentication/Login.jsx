@@ -12,17 +12,76 @@ import {
   PasswordInput,
 } from "@/components/ui/password-input"
 
+import axios from "axios";
+
+
+import { toaster } from "@/components/ui/toaster";
+import { useNavigate } from "react-router-dom";
+
+
 const Login = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const[visible,setVisible] = useState(false);
+  const[loading,setLoading] = useState(false);
 
+  const navigate = useNavigate();
 
+   const submitHandler = async() => {
+    setLoading(true);
+    if(!email || !password ){
+       toaster.create({
+        title: "Please fill all the Fields!",
+        type: "info",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
 
-  const submitHandler = () => {};
+    try{
+      const config = {
+        headers:{
+          "Content-type" : "application/json",
+        },
+      };
+
+      const {data} = await axios.post("/api/user/login" , {email,password},
+        config
+      );
+
+       toaster.create({
+        title: "Login successful!",
+        type: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+
+      localStorage.setItem('userInfo',JSON.stringify(data));
+      setLoading(false);
+
+      navigate('/chats')
+
+    }catch(error){
+       toaster.create({
+        title: error.response.data.message,
+        type: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+
+  };
+
+  
 
   return (
-    <VStack spaceX="5px" spaceY="5px">
+    <VStack spacing="5px">
       <Fieldset.Root size="lg" maxW="md">
         <Fieldset.Content>
           <Field.Root required id="email">
@@ -60,6 +119,7 @@ const Login = () => {
         style={{marginTop:15}}
         type="submit"
         onClick={submitHandler}
+        loading={loading}
          >
         Login
         </Button>
@@ -79,11 +139,8 @@ const Login = () => {
         Guest User Credential
         </Button>
 
-
-
       </Fieldset.Root>
-
-      
+ 
     </VStack>
   );
 };
