@@ -1,28 +1,38 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-
+import ChatBox from "@/components/miscellaneous/ChatBox";
+import MyChats from "@/components/miscellaneous/MyChats";
+import SideDrawer from "@/components/miscellaneous/SideDrawer";
+import { ChatState } from "@/Context/ChatProvider";
+import { Box } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ChatPage = () => {
-  
-    const [chats,setChats] = useState([]);
+   const {user} = ChatState();
+   const navigate = useNavigate();
 
-    const fetchChats = async() => {
-        const {data} = await axios.get('/api/chat');
-        console.log(data)
-        setChats(data);
-    }  
+     useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
-    useEffect(()=>{
-        fetchChats();
-    },[])
+
 
     return (
-    <div>
-    hello
+    <div style={{width:"100%"}}>
     {
-        chats.map((chat) =>
-         (<div key={chat._id}>{chat.chatName}</div>))
+        user && <SideDrawer />
     }
+    <Box
+    display="flex"
+    justifyContent='space-between'
+    w='100%'
+    h="91.5vh"
+    p="10px"
+    > 
+        {user && <MyChats />}
+        {user && <ChatBox />}
+    </Box>
     </div>
   )
 }
