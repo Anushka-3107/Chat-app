@@ -1,12 +1,8 @@
 import React from 'react'
 import {
   Button,
-  Center,
   CloseButton,
   Dialog,
-  For,
-  HStack,
-  IconButton,
   Image,
   Portal,
   useDialog,
@@ -36,7 +32,7 @@ const ProfileModal = ({user}) => {
             <Portal>
               <Dialog.Backdrop />
               <Dialog.Positioner>
-                <Dialog.Content bg="white" borderRadius="lg" p={6} >
+                <Dialog.Content bg="gray.300" borderRadius="lg" p={6} >
                   <Dialog.Header>
                     <Dialog.Title
                      fontSize="40px"
@@ -63,7 +59,7 @@ const ProfileModal = ({user}) => {
                      textAlign="center"
                      />
                      <Text
-                     fontSize={{base:"20px", md:"20px" }}
+                     fontSize={{base:"20px", md:"2px" }}
                      mt={4}
                      fontFamily="Work sans"
 
