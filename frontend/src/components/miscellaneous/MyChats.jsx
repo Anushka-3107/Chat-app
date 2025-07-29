@@ -6,6 +6,7 @@ import { BiBox } from 'react-icons/bi';
 import { Box, Button, Stack,Text } from '@chakra-ui/react';
 import { FaPlus } from 'react-icons/fa';
 import { getSender } from '../../../config/ChatLogics';
+import GroupChatModal from './GroupChatModal';
 
 const MyChats = () => {
   const [loggedUser,setLoggedUser] =useState();
@@ -61,8 +62,10 @@ const MyChats = () => {
       w="100%"
       justifyContent="space-between"
       alignItems="center"
+      color="black"
       >
       My chats
+      <GroupChatModal>
       <Button
       display="flex"
       fontSize={{base: "17px" , md: "10px", lg:"17px"}}
@@ -73,6 +76,7 @@ const MyChats = () => {
           color='white'
         />
       </Button>
+      </GroupChatModal>
       </Box>
 
 
