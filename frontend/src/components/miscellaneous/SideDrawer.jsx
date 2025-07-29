@@ -79,7 +79,7 @@ const SideDrawer = () => {
       setLoading(false);
       toaster.create({
         title:"Error Occured!",
-        description: "Failed to Load the Search Results!",
+        description: error.message,
         type: "error",
         duration:5000,
         closable: true,
