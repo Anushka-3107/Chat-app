@@ -247,7 +247,7 @@ const SideDrawer = () => {
                   ))
                 )}
 
-                {loadingChat && <Spinner ml="auto" size="md" display="flex" ml="auto" />}
+                {loadingChat && <Spinner ml="auto" size="md" display="flex" />}
 
               </Drawer.Body>
               {/* <Drawer.Footer>
