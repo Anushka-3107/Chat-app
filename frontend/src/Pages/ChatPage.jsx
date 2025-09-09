@@ -3,14 +3,16 @@ import MyChats from "@/components/miscellaneous/MyChats";
 import SideDrawer from "@/components/miscellaneous/SideDrawer";
 import { ChatState } from "@/Context/ChatProvider";
 import { Box } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ChatPage = () => {
    const {user} = ChatState();
    const navigate = useNavigate();
 
-     useEffect(() => {
+   const [fetchAgain, setFetchAgain] = useState(false);
+
+    useEffect(() => {
     if (!user) {
       navigate("/");
     }
@@ -30,8 +32,13 @@ const ChatPage = () => {
     h="91.5vh"
     p="10px"
     > 
-        {user && <MyChats />}
-        {user && <ChatBox />}
+        {user && (<MyChats
+          fetchAgain={fetchAgain}
+         />)}
+        {user && (<ChatBox
+           fetchAgain={fetchAgain} 
+           setFetchAgain={setFetchAgain}
+         />)}
     </Box>
     </div>
   )

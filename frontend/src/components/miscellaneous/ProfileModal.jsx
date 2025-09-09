@@ -24,7 +24,7 @@ const ProfileModal = ({user}) => {
              asChild 
             textAlign="center"
             >
-              <Button size="sm" variant="ghost">
+              <Button size="sm" variant="solid" bg="gray.200">
               Account
              </Button>
             </Dialog.Trigger>
@@ -72,7 +72,7 @@ const ProfileModal = ({user}) => {
 
                   <Dialog.Footer>
                     <Dialog.ActionTrigger asChild>
-                      <Button variant="outline" color="black">Cancel</Button>
+                      <Button variant="outline" color="black" _hover={{color:'white'}}>Close</Button>
                     </Dialog.ActionTrigger>
                   </Dialog.Footer>
                   <Dialog.CloseTrigger asChild>
@@ -82,10 +82,6 @@ const ProfileModal = ({user}) => {
               </Dialog.Positioner>
             </Portal>
           </Dialog.RootProvider>
-       
-
-
-
         </>
   )
 }

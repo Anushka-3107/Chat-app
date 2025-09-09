@@ -5,10 +5,10 @@ import { toaster } from '../ui/toaster';
 import { BiBox } from 'react-icons/bi';
 import { Box, Button, Stack,Text } from '@chakra-ui/react';
 import { FaPlus } from 'react-icons/fa';
-import { getSender } from '../../../config/ChatLogics';
+import { getSender } from '../../config/ChatLogics';
 import GroupChatModal from './GroupChatModal';
 
-const MyChats = () => {
+const MyChats = ({fetchAgain}) => {
   const [loggedUser,setLoggedUser] =useState();
   const {selectedChat, setSelectedChat, user,chats, setChats} = ChatState();
   
@@ -40,7 +40,7 @@ const MyChats = () => {
   useEffect(()=>{
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-  }, [])
+  }, [fetchAgain])
   
   return (
     <Box 
