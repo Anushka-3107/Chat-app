@@ -16,6 +16,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { toaster } from "../ui/toaster";
 import UserListItem from "../UserAvatar/UserListItem";
+import UserBadgeItem from "../UserAvatar/UserBadgeItem";
 
 const GroupChatModal = ({ children }) => {
   const [groupChatName, setGroupChatName] = useState();
@@ -46,7 +47,6 @@ const GroupChatModal = ({ children }) => {
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
-      
       toaster.create({
         title: "Error Occurred!",
         description: error.message,
@@ -58,7 +58,76 @@ const GroupChatModal = ({ children }) => {
     }
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async() => {
+    if(!groupChatName || selectedUser.length === 0){
+      toaster.create({
+        title: "please fill all the feilds",
+        type: "warning",
+        duration: 5000,
+        closable: true,
+        placement: "bottom-end",
+      });
+      return;
+    }
+
+    try {
+       const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const {data} = await axios.post('/api/chat/group',
+      {
+        name:groupChatName,
+        users:JSON.stringify(selectedUser.map((u) => u._id)),
+      },
+    config
+    );
+
+    setChats([data,...chats]);
+    // onclose();
+
+    toaster.create({
+        title: "New group chat created!",
+        type: "success",
+        duration: 5000,
+        closable: true,
+        placement: "bottom-end",
+      });
+      
+    } catch (error) {
+      toaster.create({
+        title: "Error Occurred!",
+        description: error.message,
+        type: "error",
+        duration: 5000,
+        closable: true,
+        placement: "bottom-end",
+      });
+    }
+
+
+  };
+
+  const handleDelete = (delUser) => {
+    setSelectedUser(selectedUser.filter((sel) => sel._id !== delUser._id))
+  };
+
+  const handleGroup = (userToAdd) => {
+    if (selectedUser.includes(userToAdd)) {
+      toaster.create({
+        title: "User already added",
+        description: "warning",
+        duration: 5000,
+        closable: true,
+        placement: "bottom-end",
+      });
+      return;
+    }
+
+    setSelectedUser([...selectedUser, userToAdd]);
+  };
 
   return (
     <>
@@ -106,16 +175,30 @@ const GroupChatModal = ({ children }) => {
                     </Field.Root>
                   </Fieldset.Content>
                 </Fieldset.Root>
-                {/* {selected users} */}
-                {/* render searched users */}
-                             {loading ? (<Spinner size="sm" />) : (
-                                searchResult?.slice(0,4).map(user => (
-                                    <UserListItem 
-                                     key={user._id}
-                                      user={user} 
-                                      handleFunction={()=> handleGroup(user)} />
-                                ))
-                             )}
+
+                <Box w="100%" d="flex" flexWrap="wrap">
+                  {selectedUser.map((u) => (
+                    <UserBadgeItem
+                      key={u._id}
+                      user={u}
+                      handleFunction={() => handleDelete(u)}
+                    />
+                  ))}
+                </Box>
+
+                {loading ? (
+                  <div>loading</div>
+                ) : (
+                  searchResult
+                    ?.slice(0, 4)
+                    .map((user) => (
+                      <UserListItem
+                        key={user._id}
+                        user={user}
+                        handleFunction={() => handleGroup(user)}
+                      />
+                    ))
+                )}
               </Dialog.Body>
 
               <Dialog.Footer>

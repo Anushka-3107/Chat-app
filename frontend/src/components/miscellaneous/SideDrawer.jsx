@@ -22,7 +22,7 @@ import { toaster } from "@/components/ui/toaster";
 import axios from "axios";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
-import { header } from "framer-motion/client";
+
 
 
 const SideDrawer = () => {
@@ -65,7 +65,7 @@ const SideDrawer = () => {
       
        console.log("Search results:", data);
 
-      setTimeout(()=> {
+       setTimeout(()=> {
         setLoading(false);
         setSearchResult(data);
 
@@ -78,7 +78,7 @@ const SideDrawer = () => {
     } catch (error) {
       setLoading(false);
       toaster.create({
-        title:"Error Occured!",
+        title:"Error Occurred!",
         description: error.message,
         type: "error",
         duration:5000,
@@ -86,9 +86,6 @@ const SideDrawer = () => {
         placement: 'bottom-end'
       });
     }
-    
-
-  
   };
 
   const accessChat = async(userId) => {
@@ -110,7 +107,6 @@ const SideDrawer = () => {
 
     setSelectedChat(data);
     setLoadingChat(false);
-    //onClose();
 
    } catch (error) {
     setLoading(false);
@@ -191,7 +187,10 @@ const SideDrawer = () => {
                       isOpen={open}
                       onClose={() => setOpen(false)}
                     >
-                      <Menu.Item value="account" justifyContent="center">
+                      <Menu.Item 
+                      value="account" 
+                      justifyContent="center" 
+                      >
                         Account
                       </Menu.Item>
                     </ProfileModal>
