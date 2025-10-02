@@ -20,7 +20,7 @@ const MyChats = ({fetchAgain}) => {
         },
       }
 
-      const {data} = await axios.get("/api/chat", config);
+      const {data} = await axios.get("http://localhost:5000/api/chat", config);
       console.log('chat data', data);
       setChats(data);
       console.log('setchats', data);
@@ -57,7 +57,7 @@ const MyChats = ({fetchAgain}) => {
       pb={3}
       px={3}
       fontSize={{base:"28px", md:"30px"}}
-      fontFamily="work sans"
+      fontFamily="Poppins"
       display="flex"
       w="100%"
       justifyContent="space-between"

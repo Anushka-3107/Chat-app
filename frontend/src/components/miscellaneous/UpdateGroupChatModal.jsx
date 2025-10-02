@@ -9,7 +9,7 @@ import axios from "axios";
 import { toaster } from "../ui/toaster";
 import UserListItem from "../UserAvatar/UserListItem";
 
-const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
   const [groupChatName, setGroupChatName] = useState("");
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -51,6 +51,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
+      fetchMessages();
       setLoading(false);
 
     } catch (error) {
@@ -200,9 +201,12 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
         isClosable: true,
         position: "bottom",
       });
+
+      setLoading(false);
     }
 
   };
+
 
 
   return (
@@ -219,7 +223,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
             <Dialog.Content>
               <Dialog.Header
                 fontSize="35px"
-                fontFamily="Work sans"
+                fontFamily="Poppins"
                 display=" flex"
                 justifyContent="center"
               >
