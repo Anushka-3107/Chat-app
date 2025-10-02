@@ -148,7 +148,7 @@ const GroupChatModal = ({ children }) => {
               <Dialog.Header>
                 <Dialog.Title
                   fontSize="30px"
-                  fontFamily="Work sans"
+                  fontFamily="Poppins"
                   display="flex"
                   color="black"
                 >
@@ -202,8 +202,7 @@ const GroupChatModal = ({ children }) => {
               </Dialog.Body>
 
               <Dialog.Footer>
-                <Dialog.ActionTrigger asChild>
-                  <Button
+                 <Button
                     variant="outline"
                     color="black"
                     _hover={{ color: "white" }}
@@ -211,7 +210,6 @@ const GroupChatModal = ({ children }) => {
                   >
                     Create Chat
                   </Button>
-                </Dialog.ActionTrigger>
               </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
                 <CloseButton size="sm" variant="solid" color="black" />

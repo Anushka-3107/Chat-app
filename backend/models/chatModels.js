@@ -20,7 +20,7 @@ const chatSchema = new Schema({
     ],
     latestMessage: {
         type:mongoose.Schema.Types.ObjectId,
-        ref:'LatestMessage',
+        ref:'Message',
     },
     groupAdmin:{
         type:mongoose.Schema.Types.ObjectId,

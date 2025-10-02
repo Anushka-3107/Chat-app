@@ -146,7 +146,7 @@ const SideDrawer = () => {
           </Button>
         </Tooltip>
 
-        <Text fontSize="2xl" fontFamily="Work Sans" color="blackAlpha.900">
+        <Text fontSize="2xl" fontFamily="Poppins" color="blackAlpha.900">
           Chat-tea-ing
         </Text>
 

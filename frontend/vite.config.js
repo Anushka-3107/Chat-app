@@ -8,10 +8,8 @@ export default defineConfig({
 
     server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:5000',  // Express server port
-        changeOrigin: true,
+      '/api': 
+       'http://localhost:5000',  // Express server port
       },
     },
-  },
 })

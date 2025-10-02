@@ -36,7 +36,7 @@ const ProfileModal = ({user}) => {
                   <Dialog.Header>
                     <Dialog.Title
                      fontSize="40px"
-                     fontFamily="Work sans"
+                     fontFamily="Poppins"
                      textAlign="center"
                      w="100%"
                      color="black"
@@ -61,7 +61,7 @@ const ProfileModal = ({user}) => {
                      <Text
                      fontSize={{base:"20px", md:"2px" }}
                      mt={4}
-                     fontFamily="Work sans"
+                     fontFamily="Poppins"
 
                      textAlign="center"
                      color="black"
