@@ -52,5 +52,30 @@ const io = require("socket.io")(server,{
 });
 
 io.on("connection", (socket) => {
+    //io.on --->used to listed registered socket
     console.log("Connected to socket.io");
+
+    socket.on("setup", (userData) => {
+        socket.join(userData._id);
+        // console.log(userData._id);
+        socket.emit("connected");
+    })
+
+    socket.on('join chat', (room) => {
+        socket.join(room);
+        console.log('user joined chat', room);
+    });
+
+    socket.on('new message', (newMessageReceived)=>{
+        var chat = newMessageReceived.chat;
+
+        if(!chat.users) return console.log("chat.users not defined");
+
+        //if we send a chat in a group it should be received by everyone in the group , except me
+        chat.users.forEach((user)=> {
+            if(user._id === newMessageReceived.sender._id) return;
+
+            socket.in(user._id).emit("message received", newMessageReceived);
+        })
+    })
 })
