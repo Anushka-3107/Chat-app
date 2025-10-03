@@ -20,24 +20,22 @@ import { toaster } from '../ui/toaster';
 import '../styles.css';
 import ScrollableChat from './ScrollableChat';
 import {io} from 'socket.io-client';
-import { useRef } from 'react';
+
 
 const ENDPOINT = "http://localhost:5000";
-// var socket, selectedChatCompare;
+var socket, selectedChatCompare;
 
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
-
-  const socket = useRef();
 
     const[messages,setMessages] = useState([]);
     const[newMessage,setNewMessage] = useState([]);
     const[loading,setLoading] = useState(false);
-
+    const[socketConnected,setSocketConnected] = useState(false);
 
     const {user,selectedChat, setSelectedChat} = ChatState();
 
     const fetchMessages = async() => {
-      if(!selectedChat) return;
+      if(!selectedChat || !selectedChat._id) return;
 
       try {
          const config = {
@@ -49,12 +47,14 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
          setLoading(true);
 
          const {data} = await axios.get(`/api/message/${selectedChat._id}`, config);
-
          console.log(messages,"fetching chat data")
          setMessages(data);
          setLoading(false);
 
+         socket.emit('join chat', selectedChat._id)
+
       } catch (error) {
+        console.error("Fetch messages error:", error);
         toaster.create({
         title: "Error Occurred!",
         description: error.response.data.message,
@@ -66,9 +66,31 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
       }
     }
 
+    
+    useEffect(()=> {
+     socket= io(ENDPOINT);
+     socket.emit("setup", user);
+     socket.on('connection', ()=> setSocketConnected(true));
+    },[]);
+
     useEffect(()=> {
       fetchMessages();
+      selectedChatCompare = selectedChat;
     }, [selectedChat]);
+
+    useEffect(() => {
+      socket.on("message received", (newMessageReceived) => {
+
+        if( !selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id){
+          //give notification
+        }
+
+        else{
+          setMessages([...messages,newMessageReceived]);
+        }
+ 
+      });
+    });
 
     const sendMessage = async(event) => {
       if(event.key === "Enter" && newMessage ){
@@ -90,7 +112,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
             console.log(data,"data typed")
 
-            
+            socket.emit('new message',data);
             setMessages([...messages,data]);
 
             
@@ -109,9 +131,6 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
     };
 
 
-    useEffect(()=> {
-     socket.current = io(ENDPOINT);
-    },[]);
 
     const typingHandler = (e) => {
       setNewMessage(e.target.value);
