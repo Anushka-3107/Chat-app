@@ -7,6 +7,7 @@ import {
   CloseButton,
   Input,
   Spinner,
+  MenuItem,
 } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -22,7 +23,9 @@ import { toaster } from "@/components/ui/toaster";
 import axios from "axios";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
-
+import { getSender } from "@/config/ChatLogics";
+import NotificationBadge from 'react-notification-badge';
+import {Effect} from 'react-notification-badge';
 
 
 const SideDrawer = () => {
@@ -32,7 +35,7 @@ const SideDrawer = () => {
   const [loadingChat,setLoadingChat] = useState();
   
   const [open, setOpen] = useState(false);
-  const { user , setSelectedChat, chats,setChats} = ChatState();
+  const { user , setSelectedChat, chats,setChats, notification,setNotification} = ChatState();
   const navigate = useNavigate();
 
   const logoutHandler = () => {
@@ -156,16 +159,32 @@ const SideDrawer = () => {
               <Button fontSize="2xl" m={1}>
                 <CiBellOn />
               </Button>
+              
             </Menu.Trigger>
 
             <Portal>
               <Menu.Positioner>
                 <Menu.Content>
-                  <Menu.Item value="new-txt">New Text File</Menu.Item>
-                  <Menu.Item value="new-file">New File...</Menu.Item>
-                  <Menu.Item value="new-win">New Window</Menu.Item>
-                  <Menu.Item value="open-file">Open File...</Menu.Item>
-                  <Menu.Item value="export">Export</Menu.Item>
+                  <Menu.Item value="no-notification">
+                     {!notification?.length && "No New msg"}
+                      {notification.map((notif) => (
+                        <MenuItem 
+                        key={notif._id} 
+                        onClick={()=> {
+                          setSelectedChat(notif.chat)
+                          setNotification(notification.filter((n) => n !== notif))
+                        }}
+                        >
+                        {
+                          notif.chat.isGroupChat?`New Message in ${notif.chat.chatName}`:
+                          `New Message from ${getSender(user, notif.chat.users)}`
+                        }
+                        </MenuItem>
+                      ))}
+                  </Menu.Item>
+
+                   
+                  
                 </Menu.Content>
               </Menu.Positioner>
             </Portal>
