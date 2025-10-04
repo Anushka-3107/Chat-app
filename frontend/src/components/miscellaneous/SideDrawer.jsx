@@ -24,8 +24,6 @@ import axios from "axios";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../UserAvatar/UserListItem";
 import { getSender } from "@/config/ChatLogics";
-import NotificationBadge from 'react-notification-badge';
-import {Effect} from 'react-notification-badge';
 
 
 const SideDrawer = () => {
