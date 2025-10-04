@@ -20,6 +20,8 @@ import { toaster } from '../ui/toaster';
 import '../styles.css';
 import ScrollableChat from './ScrollableChat';
 import {io} from 'socket.io-client';
+import Lottie from 'lottie-react';
+import animationData from "../../animations/Typing Indicator.json"
 
 
 const ENDPOINT = "http://localhost:5000";
@@ -31,8 +33,11 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
     const[newMessage,setNewMessage] = useState([]);
     const[loading,setLoading] = useState(false);
     const[socketConnected,setSocketConnected] = useState(false);
+    const[typing,setTyping] = useState(true);
+    const[istyping,setIstyping] = useState(false);
 
-    const {user,selectedChat, setSelectedChat} = ChatState();
+    const {user,selectedChat, setSelectedChat,notification,setNotification} = ChatState();
+
 
     const fetchMessages = async() => {
       if(!selectedChat || !selectedChat._id) return;
@@ -70,7 +75,9 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
     useEffect(()=> {
      socket= io(ENDPOINT);
      socket.emit("setup", user);
-     socket.on('connection', ()=> setSocketConnected(true));
+     socket.on('connected', ()=> setSocketConnected(true));
+     socket.on('typing', () => setIstyping(true));
+     socket.on('stop typing' , ()=> setIstyping(false));
     },[]);
 
     useEffect(()=> {
@@ -78,11 +85,17 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
       selectedChatCompare = selectedChat;
     }, [selectedChat]);
 
+
+    console.log("notification--------", notification)
     useEffect(() => {
       socket.on("message received", (newMessageReceived) => {
 
         if( !selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id){
-          //give notification
+          if(!notification.includes(newMessageReceived)){
+            //give notification
+            setNotification([newMessageReceived, ...notification])
+            setFetchAgain(!fetchAgain);
+          }
         }
 
         else{
@@ -94,6 +107,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
     const sendMessage = async(event) => {
       if(event.key === "Enter" && newMessage ){
+        socket.emit("stop typing" ,selectedChat._id);
         try {
          const config = {
           headers : {
@@ -134,8 +148,29 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
     const typingHandler = (e) => {
       setNewMessage(e.target.value);
-
       //typing indicator logic
+
+      if(!socketConnected) return;
+
+      if(!typing){
+        setTyping(true);
+        socket.emit('typing',selectedChat._id);
+      }
+
+      let lastTypingTime = new Date().getTime();
+      var timeLength = 3000;
+
+      setTimeout(()=>{
+        var timeCurrent = new Date().getTime();
+        var timeDiff = timeCurrent - lastTypingTime;
+        
+        if(timeDiff >= timeLength && typing){
+          socket.emit("stop typing", selectedChat._id);
+          setTyping(false);
+        }
+      }, timeLength)
+
+
     };
   
     return (
@@ -207,6 +242,15 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
         {/* messages */}
         <Box className='messages'>
             <ScrollableChat messages={messages} />
+
+
+   {istyping ? (
+        <Lottie 
+        animationData={animationData}
+          loop={true}
+          style={{width:70, marginBottom:15, marginLeft:0}}
+        />
+        ): (<></>)}
         </Box>
     </Box>
     )}
@@ -220,9 +264,10 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
   alignItems="center"
   gap={2}
   >
+
     <Fieldset.Root onKeyDown={sendMessage} _required mt={3}>
       <Fieldset.Content>
-        <Field.Root>
+        <Field.Root> 
           <Input 
           bg="gray.100"
           borderColor="white"
