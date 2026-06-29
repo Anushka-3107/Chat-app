@@ -14,7 +14,12 @@ const app = express();
 dotenv.config();
 connectDB()
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 
 app.use(express.json())  //to accept json data
 
@@ -62,12 +67,12 @@ const server = app.listen(PORT,()=>{
     console.log(`SERVER STARTED ON PORT ${PORT}`)
 })
 
-const io = require("socket.io")(server,{
-    pingTimeout: 60000,
-    cors:{
-        origin: "http://localhost:5173",
-    },
-
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  },
 });
 
 io.on("connection", (socket) => {
@@ -106,3 +111,4 @@ io.on("connection", (socket) => {
         socket.leave(userData._id);
     })
 })
+
