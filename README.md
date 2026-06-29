@@ -6,9 +6,9 @@ A full-stack real-time chat application built using the **MERN Stack** and **Soc
 
 ## 🚀 Live Demo
 
-**Frontend:** https://YOUR_FRONTEND_URL
+**Frontend:** https://chat-app-4xrh.vercel.app/
 
-**Backend API:** https://YOUR_BACKEND_URL
+**Backend API:** https://chat-app-1-srgd.onrender.com
 
 ---
 ## 📸 Screenshots
