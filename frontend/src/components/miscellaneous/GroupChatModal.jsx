@@ -100,15 +100,15 @@ const GroupChatModal = ({ children }) => {
       });
       
     } catch (error) {
-  console.log(error.response);
-  console.log(error.response?.data);
-
-  toaster.create({
-    title: "Error",
-    description: error.response?.data?.message || error.message,
-    type: "error",
-  });
-}
+      toaster.create({
+        title: "Error Occurred!",
+        description: error.message,
+        type: "error",
+        duration: 5000,
+        closable: true,
+        placement: "bottom-end",
+      });
+    }
 
 
   };
