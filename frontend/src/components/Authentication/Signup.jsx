@@ -105,7 +105,7 @@ const Signup = () => {
         },
       };
 
-      const {data} = await axios.post("/api/user" , {name,email,password,img},
+      const {data} = await axios.post("https://chat-app-1-srgd.onrender.com/api/user" , {name,email,password,img},
         config
       );
 

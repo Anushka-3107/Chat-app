@@ -48,7 +48,7 @@ const Login = () => {
         },
       };
 
-      const {data} = await axios.post("/api/user/login" , {email,password},
+      const {data} = await axios.post("https://chat-app-1-srgd.onrender.com/api/user/login" , {email,password},
         config
       );
 
