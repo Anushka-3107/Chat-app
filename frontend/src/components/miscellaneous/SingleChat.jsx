@@ -24,7 +24,7 @@ import Lottie from 'lottie-react';
 import animationData from "../../animations/Typing Indicator.json"
 
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://chat-app-1-srgd.onrender.com";
 var socket, selectedChatCompare;
 
 const SingleChat = ({fetchAgain,setFetchAgain}) => {

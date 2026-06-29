@@ -85,7 +85,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
       console.log("User Token:", user.token);
       
       const { data } = await axios.put(
-         "http://localhost:5000/api/chat/rename",
+         "https://chat-app-1-srgd.onrender.com/api/chat/rename",
         {
           chatId: selectedChat._id,
           chatName: groupChatName,
